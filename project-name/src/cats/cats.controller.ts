@@ -2,8 +2,28 @@ import { Controller, Get, Post, Delete, Res, HttpCode, Header, Param, Body, Quer
 import { get } from 'http';
 import { create } from 'domain';
 import { Observable, of } from 'rxjs';
-import { CreateCatDto } from './create-cat.dto';
+import { CreateCatDto } from './dto/create-cat.dto';
 import { Response } from 'express';
+import { Cat } from './interfaces/cat.interface';
+import { CatsService } from './cats.service';
+
+
+
+@Controller('cats')
+export class CatsController {
+    constructor(private readonly catsService: CatsService) { }
+
+    @Post()
+    async create(@Body() createCatDto: CreateCatDto) {
+        this.catsService.create(createCatDto);
+    }
+
+    @Get()
+    async findAll(): Promise<Cat[]> {
+        return this.catsService.findAll();
+    }
+}
+
 
 // // différents usages
 // @Controller('cats')
@@ -85,15 +105,18 @@ import { Response } from 'express';
 // }
 
 
-@Controller('cats')
-export class CatsController {
-    @Post()
-    create(@Res() res: Response) {
-        res.status(HttpStatus.CREATED).send();
-    }
+// @Controller('cats')
+// export class CatsController {
 
-    @Get()
-    findAll(@Res() res: Response) {
-        res.status(HttpStatus.OK).json([]);
-    }
-}
+//     @Post()
+//     create(@Res() res: Response) {
+//         res.status(HttpStatus.CREATED).send();
+//     }
+
+//     @Get()
+//     findAll(@Res() res: Response) {
+//         res.status(HttpStatus.OK).json([]);
+//     }
+// }
+
+
