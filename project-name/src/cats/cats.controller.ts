@@ -1,6 +1,8 @@
-import { Controller, Get, Post, HttpCode, Header, Param } from '@nestjs/common';
+import { Controller, Get, Post, HttpCode, Header, Param, Body } from '@nestjs/common';
 import { get } from 'http';
 import { create } from 'domain';
+import { Observable, of } from 'rxjs';
+import { CreateCatDto } from './create-cat.dto';
 
 @Controller('cats')
 export class CatsController {
@@ -12,10 +14,17 @@ export class CatsController {
     // }
 
     // // renvoi avec async
+    // @Get()
+    // async findAll(): Promise<any[]> {  // la promesse renvoi un tableau
+    //     return [];
+    // }
+
     @Get()
-    async findAll(): Promise<any[]> {  // la promesse renvoi un tableau
-        return [];
+    findAll(): Observable<any[]> {
+        return of([]);
     }
+
+    // // utilisation d'un observable
 
     // // permet de d'utiliser plusieurs type de paramètres
     // @Get(':id')
@@ -37,7 +46,7 @@ export class CatsController {
     @Post()
     @HttpCode(204)
     @Header('Cache-Control', 'none')
-    create(): string {
+    async create(@Body() createCatDto: CreateCatDto) {
         return 'This action adds a new cat';
     }
 }
